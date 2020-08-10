@@ -4,11 +4,7 @@ Using Cody Smith's nodejs port as a guide.
 
 Here is the embedded javascript from the html file:
 
-<script type="module" src="./multiclass.js"></script> 
-<script type="text/javascript" src="sjcl.js"></script> 
 
-
-<script type="module">
 
   import ShopifyMultipass from './multiclass.js'
  
@@ -26,4 +22,4 @@ Here is the embedded javascript from the html file:
 
   // Generates a URL like:  https://yourstorename.myshopify.com/account/login/multipass/<MULTIPASS-TOKEN>
 
-</script>
+
