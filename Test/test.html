@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JSMultipassTest</title>
+</head>
+<body>
+
+<h2>Javascript Multipass Test</h2>
+
+ <!-- iFrame to load the shopify site -->
+<iframe id="shopify" src="" style="width:100vw; height:100vh;"></iframe>
+
+
+<script type="module" src="./multiclass.js"></script> 
+<script type="text/javascript" src="sjcl.js"></script> 
+
+
+<script type="module">
+
+  import ShopifyMultipass from './multiclass.js'
+  
+  var url;
+  
+  // Function will be called when the user info comes in
+  function authenticate(username) {
+   
+    // Construct the Multipassify encoder
+    var multipass = new ShopifyMultipass("multipass_key");
+  
+    // Create your customer data hash
+    var customerData = { email: username, return_to: "https://www.yourstore.com/landing_page" };
+   
+    // Generate a Shopify multipass URL to your shop
+    url = multipass.generateUrl(customerData, "yourstore.myshopify.com");
+    // For debugging purposes:
+    console.log("URL: %s", url);
+    // Generates a URL like:  https://yourstorename.myshopify.com/account/login/multipass/<MULTIPASS-TOKEN>
+     document.getElementById("shopify").src = url;
+   };
+  
+   // Function called upon 200 response from GET request returning user info
+   function onSuccessGettingUserInfo() {
+  
+    var response =  { 'user' : JSON.stringify(JSON.parse(user)) };
+          var myUser = JSON.parse(decodeURIComponent(response['user']));
+     
+          var evt = new CustomEvent("UserInfo", {detail: myUser['email']});
+          window.dispatchEvent(evt);
+       
+   }
+   
+   // Called upon loading the body of the html page
+   function init() {
+        // In here, call function to GET the user info (JSON result)
+        // And if successful, call "onSuccessGettingUserInfo"
+    };
+    
+    // Listen for the arrival of the UserInfo, and call "authenticate"
+    window.addEventListener("UserInfo", function(evt) {
+      authenticate(evt.detail);
+    }, false);
+
+    // Catch "Load" event on the page body
+    var body = document.getElementsByTagName("body")[0];
+    body.addEventListener("load", init(), false);
+   
+     
+  </script>
+
+</body>
+</html>
